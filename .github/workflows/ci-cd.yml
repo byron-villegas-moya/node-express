@@ -89,6 +89,8 @@ jobs:
           name: artillery-report.html
           path: artillery-report.html
   performance-test-jmeter:
+    permissions:
+      contents: write
     needs: [deploy]
     runs-on: ubuntu-latest
     container:
