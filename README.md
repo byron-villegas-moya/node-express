@@ -1313,7 +1313,7 @@ Usamos [SemVer](https://semver.org/) para el versionado. Para todas las versione
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-- **Byron Villegas** - *Desarrollador* - [byron-villegas-moya](https://github.com/byron-villegas-moya)
+- **Byron Villegas Moya** - *Desarrollador* - [byron-villegas-moya](https://github.com/byron-villegas)
 
 También puedes mirar la lista de todos los [contribuyentes](https://github.com/byron-villegas-moya/node-express/graphs/contributors) quíenes han participado en este proyecto. 
 
