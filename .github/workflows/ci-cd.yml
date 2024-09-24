@@ -58,3 +58,20 @@ jobs:
           path: deploy.json
       - name: Sleep by two minutes
         run: sleep 120
+  acceptance-test:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    container:
+      image: node:18.17.0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change ownership of /github/home
+        run: chown -R $(whoami) /github/home
+      - name: Install node modules
+        run: npm install
+      - name: Run acceptance tests
+        run: npm run test:acceptance --HOST=https://node-express-mp7s.onrender.com --PORT=443 --CONTEXT_PATH=/api --AMBIENTE=dev
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report.html
+          path: cucumber-report.html
