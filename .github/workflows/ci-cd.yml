@@ -10,7 +10,7 @@ jobs:
     container:
       image: node:18.17.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Change ownership of /github/home
         run: chown -R $(whoami) /github/home
       - name: Install node modules
@@ -21,7 +21,7 @@ jobs:
     container:
       image: node:18.17.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Change ownership of /github/home
         run: chown -R $(whoami) /github/home
       - name: Install node modules
@@ -64,7 +64,7 @@ jobs:
     container:
       image: node:18.17.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Change ownership of /github/home
         run: chown -R $(whoami) /github/home
       - name: Install node modules
@@ -81,7 +81,7 @@ jobs:
     container:
       image: node:18.17.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Change ownership of /github/home
         run: chown -R $(whoami) /github/home
       - name: Install node modules
@@ -95,7 +95,7 @@ jobs:
       - name: Create base path variable
         run: export BASE_PATH="$HOST:$PORT$CONTEXT_PATH"
       - name: Run artillery performance tests
-        run: npx artillery run -e dev node-express/performance-test/artillery/node-express.yml --output artillery-test.json
+        run: npx artillery run -e dev performance-test/artillery/node-express.yml --output artillery-test.json
       - name: Generate artillery performance tests html report
         run: npm run test:performance-report
       - uses: actions/upload-artifact@v4
