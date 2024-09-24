@@ -52,7 +52,7 @@ jobs:
         with:
           name: deploy
           path: deploy.json
-      - name: Sleep by two minutes
+      - name: Sleep By Two Minutes
         run: sleep 120
   acceptance-test:
     needs: [deploy]
@@ -91,7 +91,6 @@ jobs:
   performance-test-jmeter:
     needs: [deploy]
     runs-on: ubuntu-latest
-    permissions: read-all|write-all
     container:
       image: openjdk:8
     steps:
