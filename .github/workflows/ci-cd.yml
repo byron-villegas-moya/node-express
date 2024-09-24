@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install node modules
         run: npm install
+
   unit-test:
     needs: [build]
     runs-on: ubuntu-latest
@@ -40,6 +41,7 @@ jobs:
           indicators: true
           output: both
           thresholds: '80'
+
   deploy:
     needs: [build, unit-test]
     runs-on: ubuntu-latest
@@ -54,6 +56,7 @@ jobs:
           path: deploy.json
       - name: Sleep by two minutes
         run: sleep 120
+
   acceptance-test:
     needs: [deploy]
     runs-on: ubuntu-latest
@@ -69,6 +72,7 @@ jobs:
         with:
           name: cucumber-report.html
           path: cucumber-report.html
+
   performance-test-artillery:
     needs: [deploy]
     runs-on: ubuntu-latest
@@ -88,15 +92,15 @@ jobs:
         with:
           name: artillery-report.html
           path: artillery-report.html
+
   performance-test-jmeter:
     needs: [deploy]
     runs-on: ubuntu-latest
+    permissions: read-all|write-all
     container:
       image: openjdk:8
     steps:
       - uses: actions/checkout@v4
-      - name: Change Ownership Of github.workspace
-        run: chown -R $(whoami)  ${{ github.workspace }}
       - name: Download Apache JMeter
         run: wget https://dlcdn.apache.org/jmeter/binaries/apache-jmeter-5.6.3.tgz
       - name: Extract Apache JMeter tar
