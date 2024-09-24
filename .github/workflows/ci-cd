@@ -1,0 +1,60 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:18.17.0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change ownership of /github/home
+        run: chown -R $(whoami) /github/home
+      - name: Install node modules
+        run: npm install
+  unit-test:
+    needs: [build]
+    runs-on: ubuntu-latest
+    container:
+      image: node:18.17.0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change ownership of /github/home
+        run: chown -R $(whoami) /github/home
+      - name: Install node modules
+        run: npm install
+      - name: Run tests with coverage with console and html report
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: rust-actix/coverage/
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: rust-actix/coverage/cobertura-coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '80'
+  deploy:
+    needs: [build, unit-test]
+    runs-on: ubuntu-latest
+    env:
+      RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+    steps:
+      - name: Deploy by hook
+        run: curl -X POST $RENDER_DEPLOY_HOOK > deploy.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deploy
+          path: deploy.json
+      - name: Sleep by two minutes
+        run: sleep 120
