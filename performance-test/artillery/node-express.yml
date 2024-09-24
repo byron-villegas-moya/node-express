@@ -1,0 +1,85 @@
+config:
+  target: ""
+  environments: # Ambientes
+    qa:
+      target: "{{ $processEnvironment.BASE_PATH }}"
+      phases:
+    dev:
+      target: "{{ $processEnvironment.BASE_PATH }}"
+    local:
+      target: "http://localhost:3000/api"
+  phases: # Las fases pueden ser dinamicas por ambientes
+    - duration: 20 # Duracion en segundos
+      arrivalRate: 10 # Cantidad de usuarios
+  plugins:
+    expect: {}
+  processor: "./processor.js" # Archivo por defecto para funciones personalizadas
+  payload: # Carga previa de datos
+    path: "./login.csv" # Utilizamos un login csv
+    fields:
+      - "username" # Obtenemos el username (se transforman en variables globales)
+      - "password" # Obtenemos el password (se transforman en variables globales)
+before: # Antes de ejecutar los scenarios
+  flow:
+    - log: "Obtener Token" # Log obtener token
+    - post: # Metodo http
+        url: "/auth" # Url del servicio
+        json: # Formato del body
+          username: "{{ username }}" # Usamos las variables globales
+          password: "{{ password }}" # Usamos las variables globales
+        capture: # Captura el resultado
+          - json: "$.accessToken" # Formato del resultado .atributo
+            as: "accessToken" # Nombre de la variable global
+scenarios: # Lista de scenarios
+  - name: "Autenticacion de usuario" # Nombre del scenario
+    flow:
+      - post: # Metodo http
+          url: "/auth" # Url del servicio
+          json: # Formato del body
+            username: "{{ username }}" # Usamos las variables globales
+            password: "{{ password }}" # Usamos las variables globales
+          expect:
+          - statusCode: 200
+          - contentType: json
+  - name: "Obtener usuarios"
+    flow:
+      - get: # Metodo http
+          url: "/usuarios" # Url del servicio
+          headers: # Headers personalizados
+            authorization: "Bearer {{ accessToken }}" # Usamos la variable global
+          expect:
+          - statusCode: 200
+          - contentType: json
+  - name: "Obtener productos"
+    flow:
+      - get:
+          url: "/productos"
+          expect:
+          - statusCode: 200
+          - contentType: json
+  - name: "Obtener producto mediante sku"
+    flow:
+      - get:
+          url: "/productos/{{sku}}" # Usamos la variable generada por la funcion
+          beforeRequest: obtenerSkuProducto # Funcion personalizada dentro del processor.js para obtener el sku de un producto de la lista de productos.json
+          expect:
+          - statusCode: 200
+          - contentType: json
+  - name: "Obtener productos ordenados por una propiedad"
+    flow:
+      - get:
+          url: "/productos"
+          qs: # Parametros query ?
+            sort: "-precio" # parametro: valor
+          expect:
+          - statusCode: 200
+          - contentType: json
+  - name: "Filtrar productos por una propiedad"
+    flow:
+      - get:
+          url: "/productos"
+          qs:
+            marca: "Nintendo"
+          expect:
+          - statusCode: 200
+          - contentType: json

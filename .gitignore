@@ -1,0 +1,24 @@
+# Node Modules
+node_modules
+
+# NYC Output
+.nyc_output
+
+# Coverage
+coverage
+
+# Cucumber Report File
+cucumber-report.html
+
+# Artillery Test File
+artillery-test.json
+
+# Artillery Report File
+artillery-report.html
+
+# JMeter Log
+**/jmeter.log
+test_results.jtl
+
+# JMeter Report
+jmeter-result
