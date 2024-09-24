@@ -89,7 +89,7 @@ jobs:
       - name: Run artillery performance tests
         run: npx artillery run -e "dev" performance-test/artillery/node-express.yml --output artillery-test.json
         env:
-          BASE_PATH: https://node-express-mp7s.onrender.com:433/api
+          BASE_PATH: https://node-express-mp7s.onrender.com/api
       - name: Generate artillery performance tests html report
         run: npm run test:performance-report
       - uses: actions/upload-artifact@v4
