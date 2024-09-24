@@ -5,7 +5,7 @@ module.exports = {
     'nyc.config.js',
     'coverage',
     'cucumber.js',
-    'artillery/processor.js',
+    'performance-test/artillery',
     'acceptance-test',
     'jmeter-result',
     'test'
