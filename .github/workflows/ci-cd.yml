@@ -102,7 +102,7 @@ jobs:
       - name: Extract Apache JMeter tar
         run: tar -xzf apache-jmeter-5.6.3.tgz
       - name: Run Apache Jmeter Performance Tests
-        run: sh apache-jmeter-5.6.3/bin/jmeter -n -t /performance-test/jmeter/node-express.jmx -JvPROTOCOL=https -JvHOST="node-express-mp7s.onrender.com" -JvPORT=443 -JvCONTEXT=/api -JvVERSION=/ -JvAMBIENTE=dev -JvTHREADS=10 -JvTIMEOUT=8000 -JvRAMP_UP=1 -LDEBUG -l test_results.jtl -e -o /jmeter-result
+        run: sh apache-jmeter-5.6.3/bin/jmeter -n -t performance-test/jmeter/node-express.jmx -JvPROTOCOL=https -JvHOST="node-express-mp7s.onrender.com" -JvPORT=443 -JvCONTEXT=/api -JvVERSION=/ -JvAMBIENTE=dev -JvTHREADS=10 -JvTIMEOUT=8000 -JvRAMP_UP=1 -LDEBUG -l test_results.jtl -e -o jmeter-result
       - uses: actions/upload-artifact@v4
         with:
           name: jmeter-result
